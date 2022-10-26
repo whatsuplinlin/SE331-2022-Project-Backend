@@ -7,9 +7,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import se331.rest.entity.Admin;
 import se331.rest.entity.Comment;
 import se331.rest.entity.People;
 import se331.rest.entity.Vaccine;
+import se331.rest.repository.AdminRepository;
 import se331.rest.repository.CommentRepository;
 import se331.rest.repository.PeopleRepository;
 import se331.rest.repository.VaccineRepository;
@@ -38,6 +40,9 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    AdminRepository adminRepository;
     @Override
     @Transactional
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -52,8 +57,16 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
 //                .type("Pfizer")
 //                .build());
         Comment comment=null;
-
+        Admin admin = null;
         People people = null;
+        admin = adminRepository.save(Admin.builder()
+                        .name("Hin")
+                        .surname("Tipnuan")
+                .build());
+        admin.setUser(user1);
+        user1.setAdmin(admin);
+        user1.setPeople(null);
+
         people = peopleRepository.save(People.builder()
                 .name("Harry")
                 .surname("Potter")
@@ -91,8 +104,8 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
 
 //        people.getVaccineList().add(vaccine1);
         people.getCommentList().add(comment);
-        people.setUser(user1);
-        user1.setPeople(people);
+//        people.setUser(user1);
+//        user1.setPeople(people);
         System.out.println(user1.getAuthorities());
         people = peopleRepository.save(People.builder()
                 .name("Nitipoom")

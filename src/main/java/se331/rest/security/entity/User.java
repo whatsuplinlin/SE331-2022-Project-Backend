@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import se331.rest.entity.Admin;
 import se331.rest.entity.People;
 
 import javax.persistence.*;
@@ -49,6 +50,7 @@ public class User {
     @NotNull
     private String email;
 
+
     @Column(name = "ENABLED")
     @NotNull
     private Boolean enabled;
@@ -58,11 +60,19 @@ public class User {
     @NotNull
     private Date lastPasswordResetDate;
 
+    @Column(name="IMAGE")
+    String image;
+
 	@Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Authority> authorities = new ArrayList<>();
 
     @OneToOne
     People people;
+
+    @OneToOne
+    Admin admin;
+
+
 
 }

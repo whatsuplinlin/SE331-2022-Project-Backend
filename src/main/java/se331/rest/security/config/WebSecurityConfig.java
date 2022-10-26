@@ -47,12 +47,15 @@ public class WebSecurityConfig {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .authorizeRequests()
-                .antMatchers("/auth/**",  "/refresh" ).permitAll()
+                .antMatchers("/auth/**",  "/refresh", "/register" ).permitAll()
                 .antMatchers(HttpMethod.GET,"/people/**").hasRole("ADMIN")
 //                .antMatchers(HttpMethod.GET,"/people").hasRole("ADMIN")
 //                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/people").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/register").permitAll()
+                .antMatchers(HttpMethod.POST,"/register").permitAll()
                 .antMatchers(HttpMethod.POST,"/comment/people/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/uploadFile").permitAll()
                 .anyRequest()
                 .authenticated();
         http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);

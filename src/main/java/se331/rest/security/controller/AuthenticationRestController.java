@@ -12,14 +12,29 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import se331.rest.entity.People;
+import se331.rest.repository.PeopleRepository;
+import se331.rest.security.entity.Authority;
+import se331.rest.security.entity.AuthorityName;
 import se331.rest.security.entity.JwtUser;
 import se331.rest.security.entity.User;
+import se331.rest.security.repository.AuthorityRepository;
 import se331.rest.security.repository.UserRepository;
+import se331.rest.security.service.UserService;
 import se331.rest.security.util.JwtTokenUtil;
+import se331.rest.util.CloudStorageHelper;
 import se331.rest.util.LabMapper;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,8 +55,19 @@ public class AuthenticationRestController {
     private UserDetailsService userDetailsService;
 
     @Autowired
+    AuthorityRepository authorityRepository;
+
+    @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    PeopleRepository peopleRepository;
+
+    @Autowired
+    CloudStorageHelper cloudStorageHelper;
     @PostMapping("/auth")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
 
@@ -63,6 +89,9 @@ public class AuthenticationRestController {
         if (user.getPeople() != null) {
             result.put("user", LabMapper.INSTANCE.getPeopleDto( user.getPeople()));
         }
+        if (user.getAdmin() != null) {
+            result.put("user", LabMapper.INSTANCE.getAdminDTO( user.getAdmin()));
+        }
 
         return ResponseEntity.ok(result);
     }
@@ -80,6 +109,37 @@ public class AuthenticationRestController {
         } else {
             return ResponseEntity.badRequest().body(null);
         }
+    }
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody User user) throws AuthenticationException, ServletException, IOException {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        Authority authAdmin = Authority.builder().name(AuthorityName.ROLE_ADMIN).build();
+        authorityRepository.save(authAdmin);
+//        System.out.println(user.getImage());
+        User user2 = User.builder()
+                .enabled(true)
+                .email(user.getEmail())
+                .firstname("")
+                .lastname("")
+                .username(user.getUsername())
+                .password(encoder.encode(user.getPassword()))
+                .lastPasswordResetDate(Date.from(LocalDate.of(2021,01,01)
+                        .atStartOfDay(ZoneId.systemDefault()).toInstant()))
+                .image(user.getImage())
+                .build();
+
+        user2.getAuthorities().add(authAdmin);
+        userRepository.save(user2);
+
+        People people = People.builder().name(user.getUsername()).build();
+        peopleRepository.save(people);
+
+        people.setUser(user2);
+        user2.setPeople(people);
+
+
+        userService.save(user2);
+     return ResponseEntity.ok(LabMapper.INSTANCE.getUserDTO(user2));
     }
 
 
