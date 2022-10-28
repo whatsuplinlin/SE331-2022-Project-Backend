@@ -1,4 +1,4 @@
-package se331.rest.security.util;
+package se331.rest.security.service.util;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

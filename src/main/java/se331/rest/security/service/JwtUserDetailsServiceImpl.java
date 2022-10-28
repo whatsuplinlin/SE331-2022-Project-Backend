@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import se331.rest.security.entity.User;
 import se331.rest.security.repository.UserRepository;
-import se331.rest.security.util.JwtUserFactory;
+import se331.rest.security.service.util.JwtUserFactory;
 
 
 /**

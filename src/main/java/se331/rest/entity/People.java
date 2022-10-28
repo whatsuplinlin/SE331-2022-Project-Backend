@@ -21,7 +21,7 @@ public class People {
     String name;
     String surname;
     String image;
-    Integer age;
+    String age;
     String gender;
     String hometown;
     String status;
@@ -32,6 +32,9 @@ public class People {
     @OneToMany
     @Builder.Default
     List<Vaccine> vaccineList = new ArrayList<>();
+
+    @ManyToOne
+    Doctor doctor;
 
     @OneToOne
     User user;

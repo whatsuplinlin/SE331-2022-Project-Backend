@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdminDTO {
-    Long id;
+public class AuthorityDTO {
     String name;
-    String surname;
-    String image;
 }

@@ -1,4 +1,4 @@
-package se331.rest.security.entity;
+package se331.rest.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,17 +11,13 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
+public class DoctorDTO {
     Long id;
-     String username;
-     String firstname;
-     String lastname;
-    String email;
-    String password;
+    String name;
+    String surname;
+    String image;
     String age;
     String gender;
     String hometown;
-    List<AuthorityDTO> authority;
-    String image;
-
+    List<PeopleOwnByDoctorDTO> peopleList;
 }

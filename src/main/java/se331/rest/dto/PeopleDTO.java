@@ -18,10 +18,11 @@ public class PeopleDTO {
     String name;
     String surname;
     String image;
-    Integer age;
+    String age;
     String gender;
     String hometown;
     String status;
     List<CommentDTO> commentList;
     List<VaccineDTO> vaccineList;
+    DoctorDTO doctor;
 }

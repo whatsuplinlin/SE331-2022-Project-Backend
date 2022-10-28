@@ -15,9 +15,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import se331.rest.entity.Comment;
+import se331.rest.entity.Doctor;
 import se331.rest.entity.People;
 import se331.rest.repository.PeopleRepository;
+import se331.rest.security.dao.UserDao;
 import se331.rest.security.entity.Authority;
 import se331.rest.security.entity.AuthorityName;
 import se331.rest.security.entity.JwtUser;
@@ -25,7 +27,9 @@ import se331.rest.security.entity.User;
 import se331.rest.security.repository.AuthorityRepository;
 import se331.rest.security.repository.UserRepository;
 import se331.rest.security.service.UserService;
-import se331.rest.security.util.JwtTokenUtil;
+import se331.rest.security.service.util.JwtTokenUtil;
+import se331.rest.service.DoctorService;
+import se331.rest.service.PeopleService;
 import se331.rest.util.CloudStorageHelper;
 import se331.rest.util.LabMapper;
 
@@ -68,6 +72,8 @@ public class AuthenticationRestController {
 
     @Autowired
     CloudStorageHelper cloudStorageHelper;
+
+
     @PostMapping("/auth")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
 
@@ -87,10 +93,13 @@ public class AuthenticationRestController {
         result.put("token", token);
         User user = userRepository.findById(((JwtUser) userDetails).getId()).orElse(null);
         if (user.getPeople() != null) {
-            result.put("user", LabMapper.INSTANCE.getPeopleDto( user.getPeople()));
+            result.put("user", LabMapper.INSTANCE.getPeopleAuthDTO(user.getPeople()));
         }
         if (user.getAdmin() != null) {
-            result.put("user", LabMapper.INSTANCE.getAdminDTO( user.getAdmin()));
+            result.put("user", LabMapper.INSTANCE.getAdminAuthDTO(user.getAdmin()));
+        }
+        if (user.getDoctor() != null) {
+            result.put("user", LabMapper.INSTANCE.getDoctorAuthDTO(user.getDoctor()));
         }
 
         return ResponseEntity.ok(result);
@@ -110,37 +119,38 @@ public class AuthenticationRestController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) throws AuthenticationException, ServletException, IOException {
         PasswordEncoder encoder = new BCryptPasswordEncoder();
-        Authority authAdmin = Authority.builder().name(AuthorityName.ROLE_ADMIN).build();
-        authorityRepository.save(authAdmin);
+        Authority authUser = Authority.builder().name(AuthorityName.ROLE_USER).build();
+        authorityRepository.save(authUser);
 //        System.out.println(user.getImage());
         User user2 = User.builder()
                 .enabled(true)
                 .email(user.getEmail())
-                .firstname("")
-                .lastname("")
+                .age(user.getAge())
+                .hometown(user.getHometown())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
                 .username(user.getUsername())
+                .gender(user.getGender())
                 .password(encoder.encode(user.getPassword()))
-                .lastPasswordResetDate(Date.from(LocalDate.of(2021,01,01)
+                .lastPasswordResetDate(Date.from(LocalDate.of(2021, 01, 01)
                         .atStartOfDay(ZoneId.systemDefault()).toInstant()))
                 .image(user.getImage())
                 .build();
-
-        user2.getAuthorities().add(authAdmin);
+        user2.getAuthorities().add(authUser);
         userRepository.save(user2);
-
-        People people = People.builder().name(user.getUsername()).build();
-        peopleRepository.save(people);
-
-        people.setUser(user2);
-        user2.setPeople(people);
+//
+//       User people = People.builder().name(user.getUsername()).build();
+//        peopleRepository.save(people);
+//
+//        people.setUser(user2);
+//        user2.setPeople(people);
 
 
         userService.save(user2);
-     return ResponseEntity.ok(LabMapper.INSTANCE.getUserDTO(user2));
+        return ResponseEntity.ok(LabMapper.INSTANCE.getUserDTO(user2));
     }
-
-
 }

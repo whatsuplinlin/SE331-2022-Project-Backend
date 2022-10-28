@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import se331.rest.entity.Admin;
+import se331.rest.entity.Doctor;
 import se331.rest.entity.People;
 
 import javax.persistence.*;
@@ -63,7 +64,16 @@ public class User {
     @Column(name="IMAGE")
     String image;
 
-	@Builder.Default
+    @Column(name="AGE")
+    String age;
+
+    @Column(name="HOMETOWN")
+    String hometown;
+
+    @Column(name="GENDER")
+    String gender;
+
+    @Builder.Default
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Authority> authorities = new ArrayList<>();
 
@@ -73,6 +83,8 @@ public class User {
     @OneToOne
     Admin admin;
 
+    @OneToOne
+    Doctor doctor;
 
 
 }

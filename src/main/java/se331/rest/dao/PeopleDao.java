@@ -8,6 +8,5 @@ public interface PeopleDao {
     People save (People people);
     People getPeople(Long id);
     Page<People> getPeople(Integer pageSize, Integer page);
-
     Page<People> getPeople(String name,Pageable page);
 }
