@@ -21,9 +21,9 @@ import java.util.Date;
 
 @Component
 public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
-   @Autowired
+    @Autowired
     PeopleRepository peopleRepository;
-   @Autowired
+    @Autowired
     VaccineRepository vaccineRepository;
 
     @Autowired
@@ -52,8 +52,8 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
 
 
         admin = adminRepository.save(Admin.builder()
-                        .name("Hin")
-                        .surname("Tipnuan")
+                .name("Hin")
+                .surname("Tipnuan")
                 .build());
         setInfoAdmin(user1,admin);
 //        admin.setUser(user1);
@@ -62,18 +62,18 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
 //        user1.setAdmin(admin);
 
         doctor1 = doctorRepository.save(Doctor.builder()
-                        .name("Doctor")
-                        .surname("Jupmua")
-                        .image("https://thumbs.dreamstime.com/b/fun-friendly-doctor-1043544.jpg")
-                        .age("60")
-                        .gender("Male")
-                        .hometown("London, UK")
+                .name("Doctor")
+                .surname("Jupmua")
+                .image("https://thumbs.dreamstime.com/b/fun-friendly-doctor-1043544.jpg")
+                .age("60")
+                .gender("Male")
+                .hometown("London, UK")
                 .build());
         setInfoDoctor(user3,doctor1);
         doctor2 = doctorRepository.save(Doctor.builder()
                 .name("Jummai")
                 .surname("Dai")
-                        .image("https://thumbs.dreamstime.com/b/male-chinese-doctor-14540892.jpg")
+                .image("https://thumbs.dreamstime.com/b/male-chinese-doctor-14540892.jpg")
                 .gender("Male")
                 .hometown("London, UK")
                 .age("60")
@@ -93,7 +93,7 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
                 .status("3rd dose")
                 .hometown("London, UK")
                 .image("https://upload.wikimedia.org/wikipedia/en/d/d7/Harry_Potter_character_poster.jpg")
-               .build());
+                .build());
 
         comment = commentRepository.save(Comment.builder()
                 .patient_name("Harry")
@@ -115,8 +115,8 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
 
         vaccine = vaccineRepository.save(Vaccine.builder()
                 .type("Pfizer")
-                        .number(1)
-                        .date("31-07-2021")
+                .number(1)
+                .date("31-07-2021")
                 .build());
 
         people.getVaccineList().add(vaccine);
@@ -440,5 +440,9 @@ public class InitApp implements ApplicationListener<ApplicationReadyEvent> {
         user.setDoctor(doctor);
         user.setFirstname(doctor.getName());
         user.setLastname(doctor.getSurname());
+        user.setGender(doctor.getGender());
+        user.setImage(doctor.getImage());
+        user.setHometown(doctor.getHometown());
+        user.setAge(doctor.getAge());
     }
 }
