@@ -97,7 +97,7 @@ public class UserController {
                 .hometown(fakeuser.getHometown())
                 .build();
         changeUser.setUser(fakeuser);
-
+        fakeuser.getAuthorities().clear();
         fakeuser.getAuthorities().add(authPatient);
         userRepository.save(fakeuser);
         fakeuser.setPeople(changeUser);
