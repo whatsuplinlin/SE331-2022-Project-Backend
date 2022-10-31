@@ -120,7 +120,7 @@ public class UserController {
                 .age(fakeuser.getAge())
                 .build();
         changeUser.setUser(fakeuser);
-
+        fakeuser.getAuthorities().clear();
         fakeuser.getAuthorities().add(authDoctor);
         userRepository.save(fakeuser);
         doctorService.save(changeUser);
