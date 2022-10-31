@@ -12,12 +12,24 @@
 
 ### ◼️ Web Application URL
 
-👉🏻 http://34.203.155.108:8001/
+👉🏻 http://34.203.155.108:8001
 
 ---
 
 ### ◼️ Backend URL
 
-👉🏻 http://34.203.155.108:8999/
+👉🏻 http://34.203.155.108:8999
+
+---
+
+### ◼️ Github URL for Frontend
+
+👉🏻 https://github.com/whatsuplinlin/SE331-2022-Project-Frontend.git
+
+---
+
+### ◼️ Github URL for Backend
+
+👉🏻 https://github.com/whatsuplinlin/SE331-2022-Project-Backend.git
 
 ---
