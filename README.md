@@ -9,3 +9,15 @@
 | 🐤   | 632115503  | Jeongmin Kim | [whatsuplinlin](https://github.com/whatsuplinlin)   |
 
 ---
+
+### ◼️ Web Application URL
+
+👉🏻 http://34.203.155.108:8001/
+
+---
+
+### ◼️ Backend URL
+
+👉🏻 http://34.203.155.108:8999/
+
+---
